@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Entrar · Gestão Fácil{% endblock %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-intro">
+    <span class="eyebrow">GESTÃO SIMPLES, NEGÓCIO ORGANIZADO</span>
+    <h1>Seu negócio, <em>mais fácil.</em></h1>
+    <p>Organize produtos, clientes, vendas e estoque em um só lugar.</p>
+    <div class="mini-stats"><span>Produtos</span><span>Clientes</span><span>Vendas</span></div>
+  </div>
+  <form class="panel auth-card" method="post">
+    <h2>Bem-vindo de volta</h2><p class="muted">Entre na sua conta para continuar.</p>
+    <label>E-mail<input type="email" name="email" required autocomplete="email" placeholder="voce@exemplo.com"></label>
+    <label>Senha<input type="password" name="senha" required autocomplete="current-password" placeholder="Sua senha"></label>
+    <button class="btn primary full" type="submit">Entrar</button>
+    <p class="auth-switch">Ainda não tem conta? <a href="{{ url_for('cadastro') }}">Criar conta</a></p>
+  </form>
+</section>
+{% endblock %}

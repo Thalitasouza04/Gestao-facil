@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Criar conta · Gestão Fácil{% endblock %}
+{% block content %}
+<section class="auth-wrap single">
+  <form class="panel auth-card" method="post">
+    <a class="back-link" href="{{ url_for('login') }}">← Voltar para entrar</a>
+    <h1>Criar sua conta</h1><p class="muted">Comece a organizar seu negócio gratuitamente.</p>
+    <label>Seu nome<input type="text" name="nome" required maxlength="100" autocomplete="name"></label>
+    <label>E-mail<input type="email" name="email" required maxlength="150" autocomplete="email"></label>
+    <label>Senha<input type="password" name="senha" required minlength="8" autocomplete="new-password"><small>Use pelo menos 8 caracteres.</small></label>
+    <button class="btn primary full" type="submit">Criar conta</button>
+  </form>
+</section>
+{% endblock %}

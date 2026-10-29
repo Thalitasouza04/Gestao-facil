@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Vendas · Gestão Fácil{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">MOVIMENTAÇÃO</span><h1>Vendas</h1><p class="muted">Registre vendas e mantenha o estoque atualizado automaticamente.</p></div></div>
+<div class="two-col form-layout">
+<section class="panel"><h2>Registrar venda</h2>
+{% if produtos %}<form method="post" class="stack-form">
+<label>Produto<select name="produto_id" required><option value="">Selecione um produto</option>{% for p in produtos %}<option value="{{ p.id }}" {% if p.estoque == 0 %}disabled{% endif %}>{{ p.nome }} — {{ money(p.preco_centavos) }} (estoque: {{ p.estoque }})</option>{% endfor %}</select></label>
+<label>Cliente <span class="optional">(opcional)</span><select name="cliente_id"><option value="">Não informar</option>{% for c in clientes %}<option value="{{ c.id }}">{{ c.nome }}</option>{% endfor %}</select></label>
+<label>Quantidade<input type="number" name="quantidade" min="1" step="1" value="1" required></label>
+<button class="btn primary" type="submit">✓ Confirmar venda</button></form>{% else %}<div class="empty-state"><span>▦</span><p>Cadastre um produto com estoque antes de registrar uma venda.</p><a href="{{ url_for('produtos') }}">Cadastrar produto</a></div>{% endif %}
+</section>
+<section class="panel"><div class="section-heading"><div><h2>Histórico de vendas</h2><p class="muted">Até 50 movimentações mais recentes.</p></div></div>
+{% if vendas %}<div class="table-wrap"><table><thead><tr><th>Venda</th><th>Total</th><th>Status</th><th></th></tr></thead><tbody>
+{% for v in vendas %}<tr><td><strong>#{{ v.id }} · {{ v.cliente_nome or 'Sem cliente' }}</strong><small class="cell-sub">{{ v.criado_em }}{% if v.itens %} · {{ v.itens }}{% endif %}</small></td><td>{{ money(v.total_centavos) }}</td><td><span class="status-pill {% if v.status == 'cancelada' %}cancelled{% endif %}">{{ v.status|capitalize }}</span></td><td>{% if v.status == 'concluida' %}<form method="post" action="{{ url_for('cancelar_venda', venda_id=v.id) }}" onsubmit="return confirm('Cancelar esta venda e devolver os itens ao estoque?')"><button class="text-btn" type="submit">Cancelar</button></form>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty-state"><span>↗</span><p>Nenhuma venda registrada ainda.</p></div>{% endif %}
+</section></div>
+{% endblock %}

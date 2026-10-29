@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Painel · Gestão Fácil{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div><span class="eyebrow">VISÃO GERAL</span><h1>Olá, {{ session.get('usuario_nome', 'empreendedor') }} 👋</h1><p class="muted">Aqui está um resumo do seu negócio.</p></div>
+  <a class="btn primary" href="{{ url_for('vendas') }}">＋ Registrar venda</a>
+</div>
+<div class="stats-grid">
+  <article class="stat-card"><span class="stat-icon lavender">▦</span><span class="stat-label">Produtos cadastrados</span><strong>{{ produtos }}</strong><a href="{{ url_for('produtos') }}">Ver produtos →</a></article>
+  <article class="stat-card"><span class="stat-icon mint">♙</span><span class="stat-label">Clientes</span><strong>{{ clientes }}</strong><a href="{{ url_for('clientes') }}">Ver clientes →</a></article>
+  <article class="stat-card"><span class="stat-icon peach">↗</span><span class="stat-label">Vendas concluídas</span><strong>{{ vendas }}</strong><a href="{{ url_for('vendas') }}">Ver vendas →</a></article>
+  <article class="stat-card"><span class="stat-icon blue">R$</span><span class="stat-label">Receita registrada</span><strong>{{ money(receita) }}</strong><span class="muted tiny">Vendas não canceladas</span></article>
+</div>
+<div class="two-col">
+  <section class="panel">
+    <div class="section-heading"><div><h2>Estoque para acompanhar</h2><p class="muted">Produtos com 5 unidades ou menos.</p></div><a href="{{ url_for('produtos') }}">Ver todos</a></div>
+    {% if estoque_baixo %}
+      <div class="table-wrap"><table><thead><tr><th>Produto</th><th>Estoque</th></tr></thead><tbody>
+      {% for p in estoque_baixo %}<tr><td>{{ p.nome }}</td><td><span class="stock-pill {% if p.estoque == 0 %}danger{% endif %}">{{ p.estoque }} un.</span></td></tr>{% endfor %}
+      </tbody></table></div>
+    {% else %}<div class="empty-state"><span>✓</span><p>Todos os produtos estão acima de 5 unidades.</p></div>{% endif %}
+  </section>
+  <section class="panel">
+    <div class="section-heading"><div><h2>Vendas recentes</h2><p class="muted">Últimas movimentações registradas.</p></div><a href="{{ url_for('vendas') }}">Ver todas</a></div>
+    {% if ultimas %}
+      {% for v in ultimas %}
+      <div class="sale-row"><div class="sale-badge">↗</div><div class="sale-info"><strong>{{ v.cliente_nome or 'Cliente não informado' }}</strong><small>{{ v.criado_em }} · #{{ v.id }}</small></div><div class="sale-value"><strong>{{ money(v.total_centavos) }}</strong><small class="{% if v.status == 'cancelada' %}status-cancelada{% endif %}">{{ v.status|capitalize }}</small></div></div>
+      {% endfor %}
+    {% else %}<div class="empty-state"><span>＋</span><p>Suas vendas aparecerão aqui.</p><a href="{{ url_for('vendas') }}">Registrar primeira venda</a></div>{% endif %}
+  </section>
+</div>
+{% endblock %}

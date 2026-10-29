@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Produtos · Gestão Fácil{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">CATÁLOGO</span><h1>Produtos</h1><p class="muted">Cadastre itens e acompanhe o estoque disponível.</p></div></div>
+<div class="two-col form-layout">
+<section class="panel"><h2>Novo produto</h2><form method="post" class="stack-form">
+<label>Nome do produto<input name="nome" required maxlength="120" placeholder="Ex.: Caderno universitário"></label>
+<label>Descrição <span class="optional">(opcional)</span><textarea name="descricao" rows="3" maxlength="500" placeholder="Detalhes do produto"></textarea></label>
+<div class="form-row"><label>Preço (R$)<input name="preco" required inputmode="decimal" placeholder="19,90"></label><label>Estoque inicial<input name="estoque" type="number" min="0" step="1" value="0" required></label></div>
+<button class="btn primary" type="submit">＋ Cadastrar produto</button></form></section>
+<section class="panel"><div class="section-heading"><div><h2>Seus produtos</h2><p class="muted">{{ produtos|length }} item(ns) cadastrado(s)</p></div></div>
+{% if produtos %}<div class="table-wrap"><table><thead><tr><th>Produto</th><th>Preço</th><th>Estoque</th><th></th></tr></thead><tbody>
+{% for p in produtos %}<tr><td><strong>{{ p.nome }}</strong>{% if p.descricao %}<small class="cell-sub">{{ p.descricao }}</small>{% endif %}</td><td>{{ money(p.preco_centavos) }}</td><td><span class="stock-pill {% if p.estoque <= 5 %}warning{% endif %}">{{ p.estoque }}</span></td><td><form method="post" action="{{ url_for('excluir_produto', produto_id=p.id) }}" onsubmit="return confirm('Excluir este produto?')"><button class="icon-btn" aria-label="Excluir produto" title="Excluir">×</button></form></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty-state"><span>▦</span><p>Você ainda não cadastrou produtos.</p></div>{% endif %}
+</section></div>
+{% endblock %}

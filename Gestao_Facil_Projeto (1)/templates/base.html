@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Gestão Fácil{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">GF</span> Gestão Fácil</a>
+  {% if session.get('usuario_id') %}
+  <nav>
+    <a href="{{ url_for('dashboard') }}">Painel</a>
+    <a href="{{ url_for('produtos') }}">Produtos</a>
+    <a href="{{ url_for('clientes') }}">Clientes</a>
+    <a href="{{ url_for('vendas') }}">Vendas</a>
+    <a class="nav-exit" href="{{ url_for('sair') }}">Sair</a>
+  </nav>
+  {% endif %}
+</header>
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer>Gestão Fácil · Projeto acadêmico de Sistemas de Informação</footer>
+</body>
+</html>

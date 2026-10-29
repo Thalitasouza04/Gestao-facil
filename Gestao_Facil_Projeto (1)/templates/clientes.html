@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Clientes · Gestão Fácil{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">RELACIONAMENTO</span><h1>Clientes</h1><p class="muted">Mantenha os contatos dos seus clientes organizados.</p></div></div>
+<div class="two-col form-layout">
+<section class="panel"><h2>Novo cliente</h2><form method="post" class="stack-form">
+<label>Nome completo<input name="nome" required maxlength="120" placeholder="Nome do cliente"></label>
+<label>E-mail <span class="optional">(opcional)</span><input name="email" type="email" maxlength="150" placeholder="cliente@exemplo.com"></label>
+<label>Telefone <span class="optional">(opcional)</span><input name="telefone" maxlength="30" placeholder="(61) 99999-9999"></label>
+<button class="btn primary" type="submit">＋ Cadastrar cliente</button></form></section>
+<section class="panel"><div class="section-heading"><div><h2>Seus clientes</h2><p class="muted">{{ clientes|length }} contato(s) cadastrado(s)</p></div></div>
+{% if clientes %}<div class="table-wrap"><table><thead><tr><th>Nome</th><th>Contato</th><th></th></tr></thead><tbody>
+{% for c in clientes %}<tr><td><strong>{{ c.nome }}</strong></td><td>{% if c.email %}<small class="cell-sub">{{ c.email }}</small>{% endif %}{{ c.telefone }}</td><td><form method="post" action="{{ url_for('excluir_cliente', cliente_id=c.id) }}" onsubmit="return confirm('Excluir este cliente?')"><button class="icon-btn" title="Excluir" aria-label="Excluir cliente">×</button></form></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty-state"><span>♙</span><p>Você ainda não cadastrou clientes.</p></div>{% endif %}
+</section></div>
+{% endblock %}
